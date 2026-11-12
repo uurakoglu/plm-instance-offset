@@ -51,11 +51,11 @@ if __name__ == "__main__":
     np.set_printoptions(suppress=True)
     rng = np.random.default_rng(1)
 
-    # Synthetic "bolt": a handful of points in the kept part's own coordinates.
+    # Randomly generated "bolt": a handful of points in the kept part's own coordinates.
     part_a = rng.uniform(-10, 10, size=(8, 3))
 
     # Duplicate B is the same geometry, but its origin sits somewhere else.
-    d = make_matrix((0, 0, 90), (12.5, -3.0, 40.0))        # made-up offset
+    d = make_matrix((0, 0, 90), (12.5, -3.0, 40.0))        # example offset
     part_b = apply(d, part_a)                              # so that x_B = D @ x_A
 
     # --- One example instance, step by step -------------------------------

@@ -31,7 +31,7 @@ pip install numpy
 python instance_offset.py
 ```
 
-The script first walks through one example instance, then runs a stress test. It builds a synthetic part, a made-up offset and 1,000 random placements,
+The script first walks through one example instance, then runs a stress test. It builds a randomly generated part, an example offset and 1,000 random placements,
 replaces the duplicate with the kept part and prints the largest deviation
 (around 1e-13, i.e. floating-point noise).
 
@@ -66,7 +66,7 @@ OK: the kept part overlaps the old duplicate exactly.
 
 ## Notes
 
-- All data here is synthetic. No real parts, matrices or company systems are involved.
+- All data here is randomly generated. No real parts, matrices or company systems are involved.
 - The result of this approach in practice: about 229,000 instances across about
   15,000 assemblies updated with a script instead of by hand. Background and
   numbers are in the write-up:
