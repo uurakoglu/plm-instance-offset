@@ -31,9 +31,38 @@ pip install numpy
 python instance_offset.py
 ```
 
-The script builds a synthetic part, a made-up offset and 1,000 random placements,
+The script first walks through one example instance, then runs a stress test. It builds a synthetic part, a made-up offset and 1,000 random placements,
 replaces the duplicate with the kept part and prints the largest deviation
 (around 1e-13, i.e. floating-point noise).
+
+Example output:
+
+```
+Example: one instance of the duplicate in a parent assembly
+
+D  (offset, measured once per pair):
+       0.000      -1.000       0.000      12.500
+       1.000       0.000       0.000      -3.000
+       0.000       0.000       1.000      40.000
+       0.000       0.000       0.000       1.000
+P  (placement of the duplicate in the parent):
+       0.814      -0.441       0.379     500.000
+       0.470       0.883       0.018     250.000
+      -0.342       0.163       0.925      80.000
+       0.000       0.000       0.000       1.000
+P' = P @ D  (placement for the kept part):
+      -0.441      -0.814       0.379     526.636
+       0.883      -0.470       0.018     253.947
+       0.163       0.342       0.925     112.252
+       0.000       0.000       0.000       1.000
+
+Same point of the part, seen in the parent assembly:
+  duplicate : [516.506416 249.793908 108.785805]
+  kept part : [516.506416 249.793908 108.785805]
+
+Largest deviation over 1000 random instances: 2.27e-13
+OK: the kept part overlaps the old duplicate exactly.
+```
 
 ## Notes
 

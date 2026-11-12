@@ -41,8 +41,16 @@ def apply(matrix, points):
     return (matrix @ homogeneous.T).T[:, :3]
 
 
+def show(name, m):
+    print(name)
+    for row in m:
+        print("  " + "  ".join(f"{v:10.3f}" for v in row))
+
+
 if __name__ == "__main__":
+    np.set_printoptions(suppress=True)
     rng = np.random.default_rng(1)
+
     # Synthetic "bolt": a handful of points in the kept part's own coordinates.
     part_a = rng.uniform(-10, 10, size=(8, 3))
 
@@ -50,13 +58,27 @@ if __name__ == "__main__":
     d = make_matrix((0, 0, 90), (12.5, -3.0, 40.0))        # made-up offset
     part_b = apply(d, part_a)                              # so that x_B = D @ x_A
 
+    # --- One example instance, step by step -------------------------------
+    p = make_matrix((10, 20, 30), (500.0, 250.0, 80.0))    # duplicate B inside a parent
+    p_new = new_placement(p, d)
+    print("Example: one instance of the duplicate in a parent assembly\n")
+    show("D  (offset, measured once per pair):", d)
+    show("P  (placement of the duplicate in the parent):", p)
+    show("P' = P @ D  (placement for the kept part):", p_new)
+    corner_old = apply(p, part_b[:1])[0]
+    corner_new = apply(p_new, part_a[:1])[0]
+    print("\nSame point of the part, seen in the parent assembly:")
+    print("  duplicate :", np.round(corner_old, 6))
+    print("  kept part :", np.round(corner_new, 6))
+
+    # --- Stress test: 1000 random instances -------------------------------
     worst = 0.0
-    for _ in range(1000):                                  # 1000 made-up instances
+    for _ in range(1000):
         p = make_matrix(rng.uniform(-180, 180, 3), rng.uniform(-2000, 2000, 3))
         world_old = apply(p, part_b)                       # where the duplicate sat
         world_new = apply(new_placement(p, d), part_a)     # where the kept part sits now
         worst = max(worst, float(np.abs(world_old - world_new).max()))
 
-    print(f"largest deviation over 1000 instances: {worst:.2e}")
+    print(f"\nLargest deviation over 1000 random instances: {worst:.2e}")
     assert worst < 1e-9
     print("OK: the kept part overlaps the old duplicate exactly.")
